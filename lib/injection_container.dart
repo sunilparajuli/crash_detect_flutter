@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -28,25 +29,64 @@ class DummyCrashRepository implements CrashRepository {
 
 // Placeholder for missing implementations just for dependency injection setup
 class DummySensorRepository implements SensorRepository {
+  final _controller = StreamController<SensorReading>.broadcast();
+  Timer? _timer;
+
   @override
-  Stream<SensorReading> getSensorStream() => const Stream.empty();
+  Stream<SensorReading> getSensorStream() => _controller.stream;
+
   @override
-  Future<void> startMonitoring() async {}
+  Future<void> startMonitoring() async {
+    // Emit normal 1G resting gravity continuously
+    _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
+      if (!_controller.isClosed) {
+        _controller.add(SensorReading(
+          accelerometerX: 0.0,
+          accelerometerY: 9.81, // 1G
+          accelerometerZ: 0.0,
+          gyroX: 0.0,
+          gyroY: 0.0,
+          gyroZ: 0.0,
+          timestamp: DateTime.now(),
+        ));
+      }
+    });
+  }
+
   @override
-  Future<void> stopMonitoring() async {}
+  Future<void> stopMonitoring() async {
+    _timer?.cancel();
+  }
+
+  void simulateCrash() {
+    // Inject a violent 10G impact with rapid 5 rad/s rotation
+    for (int i = 0; i < 20; i++) {
+      _controller.add(SensorReading(
+        accelerometerX: 50.0, 
+        accelerometerY: 80.0, 
+        accelerometerZ: 20.0,
+        gyroX: 5.0,
+        gyroY: 5.0,
+        gyroZ: 5.0,
+        timestamp: DateTime.now(),
+      ));
+    }
+  }
 }
 
 class DummyLocationRepository implements LocationRepository {
   @override
-  Stream<GpsCoordinates> getLocationStream() => const Stream.empty();
+  Stream<GpsCoordinates> getLocationStream() async* {
+    yield const GpsCoordinates(latitude: 37.7749, longitude: -122.4194);
+  }
   @override
   Future<ContextMetadata> fetchContextData(GpsCoordinates loc) async {
     return const ContextMetadata(
-      roadType: 'unknown',
-      weatherCondition: 'unknown',
+      roadType: 'highway', // Must not be urban + low speed
+      weatherCondition: 'clear',
       trafficCongestion: 0,
       timeOfDay: 'day',
-      speed: 0,
+      speed: 65, // Fast enough to trigger severity
     );
   }
 }
