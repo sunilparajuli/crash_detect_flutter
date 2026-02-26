@@ -12,6 +12,19 @@ import 'presentation/blocs/location_sensor_bloc.dart';
 
 import '../domain/entities/sensor_reading.dart';
 import '../domain/entities/context_metadata.dart';
+import '../domain/entities/crash_event.dart';
+import 'domain/repositories/crash_repository.dart';
+import 'domain/use_cases/notify_emergency_contacts_use_case.dart';
+import 'presentation/blocs/crash_event_bloc.dart';
+
+class DummyCrashRepository implements CrashRepository {
+  @override
+  Future<void> saveCrash(CrashEvent crash) async {}
+  @override
+  Future<List<CrashEvent>> getCrashHistory() async => [];
+  @override
+  Future<void> syncWithBackend(CrashEvent crash) async {}
+}
 
 // Placeholder for missing implementations just for dependency injection setup
 class DummySensorRepository implements SensorRepository {
@@ -68,7 +81,7 @@ Future<void> initDependencies() async {
   sl.registerLazySingleton<LocationRepository>(() => DummyLocationRepository());
 
   // Mocking CrashRepository until local DB is setup
-  // sl.registerLazySingleton<CrashRepository>(() => DummyCrashRepository());
+  sl.registerLazySingleton<CrashRepository>(() => DummyCrashRepository());
 
   // Use Cases
   sl.registerLazySingleton(() => DetectCrashUseCase(
@@ -76,16 +89,16 @@ Future<void> initDependencies() async {
         locationRepository: sl(),
       ));
   sl.registerLazySingleton(() => GenerateCrashReportUseCase());
-  // sl.registerLazySingleton(() => NotifyEmergencyContactsUseCase(crashRepository: sl()));
+  sl.registerLazySingleton(() => NotifyEmergencyContactsUseCase(crashRepository: sl()));
 
   // Blocs
-  // sl.registerFactory(() => CrashEventBloc(
-  //       detectCrashUseCase: sl(),
-  //       generateCrashReportUseCase: sl(),
-  //       notifyEmergencyContactsUseCase: sl(),
-  //       sensorRepository: sl(),
-  //       locationRepository: sl(),
-  //     ));
+  sl.registerFactory(() => CrashEventBloc(
+        detectCrashUseCase: sl(),
+        generateCrashReportUseCase: sl(),
+        notifyEmergencyContactsUseCase: sl(),
+        sensorRepository: sl(),
+        locationRepository: sl(),
+      ));
   
   sl.registerFactory(() => LocationSensorBloc(
         locationRepository: sl(),
