@@ -41,6 +41,8 @@ class CrashAlertScreen extends StatelessWidget {
                     ),
                     onPressed: () {
                       // Call emergency services immediately or dismiss
+                      context.read<CrashEventBloc>().add(StopCrashMonitoringEvent());
+                      context.read<CrashEventBloc>().add(StartCrashMonitoringEvent());
                     },
                     child: const Text('I NEED HELP (CALL 911)'),
                   ),
@@ -48,6 +50,7 @@ class CrashAlertScreen extends StatelessWidget {
                   TextButton(
                     onPressed: () {
                       context.read<CrashEventBloc>().add(StopCrashMonitoringEvent());
+                      context.read<CrashEventBloc>().add(StartCrashMonitoringEvent());
                     },
                     child: const Text('I AM OKAY (DISMISS)', style: TextStyle(color: Colors.white70)),
                   )
