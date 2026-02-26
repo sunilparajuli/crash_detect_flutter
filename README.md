@@ -1,4 +1,5 @@
 # crash_detector
+[![Build and Release Android App](https://github.com/sunilparajuli/crash_detect_flutter/actions/workflows/release.yml/badge.svg)](https://github.com/sunilparajuli/crash_detect_flutter/actions/workflows/release.yml)
 
 A new Flutter project built with a Clean Architecture outline, demonstrating on-device crash detection via simulated sensor data.
 
