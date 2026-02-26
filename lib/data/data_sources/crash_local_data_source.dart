@@ -4,7 +4,9 @@ import '../../domain/entities/crash_event.dart';
 
 // Assuming basic mapping for now, to be expanded with actual Hive objects and SQflite schema
 class CrashLocalDataSource {
+  // ignore: unused_field
   final Database _db;
+  // ignore: unused_field
   final Box _hiveBox;
 
   CrashLocalDataSource({

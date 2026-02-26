@@ -2,17 +2,12 @@ import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
-import 'domain/repositories/crash_repository.dart';
 import 'domain/repositories/location_repository.dart';
 import 'domain/repositories/sensor_repository.dart';
 import 'domain/use_cases/detect_crash_use_case.dart';
 import 'domain/use_cases/generate_crash_report_use_case.dart';
-import 'domain/use_cases/notify_emergency_contacts_use_case.dart';
-import 'data/data_sources/crash_local_data_source.dart';
 import 'data/data_sources/crash_remote_data_source.dart';
-import 'data/repositories/crash_repository_impl.dart';
 import 'data/services/edge_crash_detection_service.dart';
-import 'presentation/blocs/crash_event_bloc.dart';
 import 'presentation/blocs/location_sensor_bloc.dart';
 
 import '../domain/entities/sensor_reading.dart';

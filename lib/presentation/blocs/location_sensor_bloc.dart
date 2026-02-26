@@ -17,7 +17,9 @@ class PermissionsDenied extends LocationSensorState {
 
 // BLoC
 class LocationSensorBloc extends Bloc<LocationSensorEvent, LocationSensorState> {
+  // ignore: unused_field
   final LocationRepository _locationRepository;
+  // ignore: unused_field
   final SensorRepository _sensorRepository;
 
   LocationSensorBloc({

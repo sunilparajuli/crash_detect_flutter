@@ -6,7 +6,6 @@ import 'presentation/screens/emergency_contacts_screen.dart';
 import 'presentation/screens/crash_history_screen.dart';
 import 'presentation/screens/settings_screen.dart';
 import 'presentation/blocs/location_sensor_bloc.dart';
-import 'presentation/blocs/crash_event_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
